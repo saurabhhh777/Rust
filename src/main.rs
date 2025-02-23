@@ -1,20 +1,16 @@
-// use std::string;
+use actix_web::{web, App, HttpServer, Responder, HttpResponse};
 
-fn main(){
-    let greeting = String::from("Again OG Gang is here");
-    let first_word  = find_the(&greeting);
-    print!("First word: {}",first_word);
-
+async fn hello() -> impl Responder {
+    HttpResponse::Ok().body("Hello, Rust HTTP Server!")
 }
 
-fn find_the(s:&String)-> String{
-    let mut ans = String::new();
-    for char in s.chars(){
-        ans.push(char);
-        if char == ' ' {
-            break;
-        }
-        
-    }
-    return  ans;
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .route("/", web::get().to(hello))
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
 }
